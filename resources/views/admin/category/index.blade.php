@@ -1,22 +1,7 @@
 @extends('admin.includes.main')
 @section('title')Category Settings -  {{ config('app.name', 'Laravel') }} @endsection
 @section('content')
-<div class="content-wrapper">
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">General Form</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Main content -->
+
     <section class="content">
         <div class="col-md-12">
             <div class="card">
@@ -32,17 +17,41 @@
                         <thead>
                             <tr>
                                 <th> # </th>
+                                <th>Image</th>
                                 <th> Name </th>
+                                <th>Under Category</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
-                            @foreach ($permissions as $permission)
+                        <tbody>
+                            @foreach ($categories as $category)
                             <tr>
-                                <td> {{$permission->id}} </td>
-                                <td> {{$permission->name}} </td>
+                                <td> {{$category->id}} </td>
+                                <td>
+                                    @if(empty($category->image)) 
+                                        <img src="{{asset('category/no-image.png')}}" alt="no-image" width="80px" height="80px" class="img-fluid"> 
+                                    @else
+                                        <img src="{{asset('category/'.$category->image)}}" alt="{{$category->name}}" width="80px" height="80px" class="img-fluid">
+                                    @endif
+                                </td>
+                                <td> {{$category->name}} </td>
+                                <td>
+                                    @if($category->parent_id==0) 
+                                        Main Category 
+                                    @else 
+                                        {{$category->parent_id}} 
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($category->status==1) 
+                                        Show 
+                                    @else 
+                                        Hide 
+                                    @endif
+                                </td>
                                 
-                                <form action="{{route('permissions.destroy',$permission->id)}}" method="post">
+                                <form action="{{route('categories.destroy',$category->id)}}" method="post">
                                     @csrf
                                     @method('delete')
                                     <td class="project-actions">
@@ -52,7 +61,7 @@
                                             View
                                         </a>
                                         @can('role-edit')
-                                        <a class="btn btn-info btn-sm" href="{{route('permissions.edit',$permission->id)}}">
+                                        <a class="btn btn-info btn-sm" href="{{route('categories.edit',$category->id)}}">
                                             <i class="fas fa-pencil-alt">
                                             </i>
                                             Edit
@@ -71,9 +80,10 @@
                             
                             @endforeach
                            
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
+                {{ $categories->links() }}
             </div>
         </div>
     </section>

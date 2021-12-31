@@ -100,13 +100,13 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'role' => ['required', Rule::unique('roles')->ignore($role->id),],
+            'role' => 'required|unique:roles,name,' . $id,
             'permission' => 'required',
         ]);
-        // $role = new Role();
-        // $role->role = $request['role'];
-        $role = Role::create(['name' => $request->input('role')]);
-
+        $role = Role::find($id);
+        $role->name = $request['role'];
+        // $role = Role::create(['name' => $request->input('role')]);
+        $role->update();
         $role->syncPermissions($request->input('permission'));
         // dd($role);
         return redirect('/roles')->with('status', 'Role has been added successfully');

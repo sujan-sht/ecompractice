@@ -98,19 +98,22 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,' . $id,
             'password' => 'required|same:confirmPassword',
             'role' => 'required'
         ]);
+        if (Auth::user()->id == $id) {
+            $user = User::findOrFail($id);
+            $user->name = $request['name'];
+            $user->email = $request['email'];
+            $user->password = Hash::make($request['password']);
+            $user->assignRole($request->input('role'));
+            $user->update();
 
-        $user = User::findOrFail($id);
-        $user->name = $request['name'];
-        $user->email = $request['email'];
-        $user->password = Hash::make($request['password']);
-        $user->assignRole($request->input('role'));
-        $user->update();
-
-        return redirect('/permissions')->with('status', 'Permission has been added successfully');
+            return redirect('/users')->with('status', 'User has been updated successfully');
+        } else {
+            return redirect('/users')->with('status', 'Only authenticated user can edit');
+        }
     }
 
     /**

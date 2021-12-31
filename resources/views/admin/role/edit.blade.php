@@ -15,8 +15,9 @@
                             @include('admin.includes.message')
                         </div>
                         <div class="card-body">
-                            <form action="{{route('roles.store')}}" method="post">
+                            <form action="{{route('roles.update',$role->id)}}" method="post">
                                 @csrf
+                                @method('PATCH')
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">

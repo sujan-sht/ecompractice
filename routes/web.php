@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialSettingsController;
 use App\Http\Controllers\SiteSettingsController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -42,4 +43,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/categories', CategoryController::class);
 });
 
+
+Route::get('/auth/github/redirect',[SocialController::class,'githubRedirect'])->name('githubLogin');
+Route::get('/auth/github/callback',[SocialController::class,'callback']);
+ 
+// Route::get('auth/facebook', [FacebookSocialiteController::class, 'redirectToFB']);
+// Route::get('callback/facebook', [FacebookSocialiteController::class, 'handleCallback']);
 require __DIR__ . '/auth.php';
