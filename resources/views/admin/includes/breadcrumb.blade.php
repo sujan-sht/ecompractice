@@ -4,7 +4,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              {{-- <h1 class="m-0">Dashboard</h1> --}}
+              <h3>{{ ucwords(Request::segment(1))}}</h3>
             </div><!-- /.col -->
             <div class="col-sm-6 d-flex justify-content-end">
                 <a href="{{route('dashboard')}}"><i class="fas fa-home"></i>  Home</a> /               

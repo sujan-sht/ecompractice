@@ -14,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories=Category::first()->paginate();
+        
+        $categories=Category::orderBy('updated_at','desc')->paginate(10);
         return view('admin.category.index',compact('categories'));
     }
 
@@ -83,7 +84,9 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $categories=Category::where('parent_id',0)->where('status',1)->get();
+
         $category=Category::findOrFail($id);
+        // dd($category);
         return view('admin.category.edit',compact('category','categories'));
     }
 
@@ -104,8 +107,22 @@ class CategoryController extends Controller
         ]);
 
         $category= Category::findOrFail($id);
+        
+        $category_list=Category::all();
+        
         $category->name=$request['category'];
-        $category->parent_id=$request['parent_id'];
+
+        if($category->parent_id==0){
+            $category->parent_id=$request['parent_id'];
+            foreach($category_list as $cat){
+                if($cat->parent_id==$category->id){
+                    $cat->parent_id=$category->parent_id;
+                    $cat->update();
+                }   
+            }
+        }
+
+        
         $category->status=$request['status'];
         $category->featured=$request['featured'];
         $category->slug=$request['slug'];
@@ -130,6 +147,28 @@ class CategoryController extends Controller
 
     }
 
+    public function update_status(Request $request)
+    {
+        // dd('hello');
+        $category = Category::findOrFail($request->cat_id);
+        // dd($category);
+        $category->status = $request->status;
+        // dd($category);
+        $category->save();
+    
+        return response()->json(['message' => 'Status updated successfully.']);
+    }
+
+    public function update_feature(Request $request)
+    {
+        $feature = Category::findOrFail($request->cat_id);
+        // dd($category);
+        $feature->featured = $request->featured;
+        // dd($category);
+        $feature->save();
+    
+        return response()->json(['message' => 'Featured updated successfully.']);
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -139,5 +178,11 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function result(Request  $request)
+    {
+        $result=Category::where('name', 'LIKE', "%{$request->input('query')}%")->get();
+        return response()->json($result);
     }
 }

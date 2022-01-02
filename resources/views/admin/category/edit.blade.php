@@ -27,12 +27,25 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            @php
+                                                $cat_detail=App\Models\Category::where('id',$category->parent_id)->first(); 
+                                                // dd($cat);
+                                               @endphp
                                             <label for="parent">Under Category</label><span class="text-danger"> * </span>
                                             <select class="form-control" name="parent_id">
-                                                {{-- <option selected disabled>--Select--</option> --}}
-                                                <option value="0" @if($category->parent_id==0) selected @endif>Main Category</option>
+                                                {{-- @if ($category->parent_id == 0)
+                                                    <option value="0" selected>Main Category</option>
+                                                @else
+                                                    <option value="{{$cat->id}}" selected>{{$cat->name}}</option>
+                                                @endif --}}
+                                                <option value="0" @if($category->parent_id==0) selected @endif >Main Category</option>
+
                                                 @foreach ($categories as $cat)
-                                                    <option value="{{$cat->id}}">{{$cat->name}}</option>
+                                                    <option value="{{$cat->id}}" @if($category->parent_id==$cat->id) selected @endif>{{$cat->name}}</option>
+                                                    {{-- {{dd($category->parent_id)}} --}}
+                                                    {{-- {{dd($cat->id)}} --}}
+
+                                                    {{-- @if($category->parent_id=$cat->id) {{dd('hello')}} @endif --}}
                                                 @endforeach
                                             </select>
                                         </div>

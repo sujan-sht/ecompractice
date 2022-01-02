@@ -40,6 +40,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/roles', RoleController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/permissions', PermissionController::class);
+
+    Route::get('/categories/update-status',[CategoryController::class,'update_status'])->name('category.update_status');
+    Route::get('/categories/update-feature',[CategoryController::class,'update_feature'])->name('category.update_feature');
+    Route::get('/categories/search',[CategoryController::class,'result'])->name('categories.search');
+
+
     Route::resource('/categories', CategoryController::class);
 });
 
