@@ -29,12 +29,38 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+  
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+  
+  
+	<link rel="stylesheet" type="text/css" 
+  href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  
+  <!-- jQuery -->
+  <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  
   <style>
     .cke_chrome {
       width: 100% !important;
     }
+    .dataTables_wrapper{
+      margin-top: 10px;
+      padding-right: 10px;
+      padding-left:10px
+    }
+    .paging_simple_numbers{
+      font-size: small;
+    }
+    .paginate_button{
+      padding:0px !important;
+    }
+    .dataTables_info{
+      font-size: small;
+    }
+    
   </style>
 </head>

@@ -6,31 +6,13 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-7">
-                            @can('role-create')
-                                <a href="{{route('categories.create')}}" class="btn btn-success btn-sm">Add Category</a>
-                            @endcan
-                            
-                        </div>
-                        <div class="col-md-5">
-                            {{-- <input type="text" class="form-control" id="search" name="search"> --}}
-                            <form action="">
-                                <div class="input-group">
-                                    <input type="search" class="form-control form-control-sm" placeholder="Type your keywords here" id="search" name="search">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-sm btn-default">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    @can('role-create')
+                        <a href="{{route('categories.create')}}" class="btn btn-success btn-sm float-right">Add Category</a>
+                    @endcan
                 </div>
                 <div class="card-body p-0">
                     @include('admin.includes.message')
-                    <table class="table table-striped projects">
+                    <table class="table table-striped projects" id="myTable">
                         <thead>
                             <tr>
                                 <th> # </th>
@@ -44,7 +26,6 @@
                         </thead>
                         <tbody>
                             @if(count($categories)>0)
-                                
                                 @foreach ($categories as $category)
                                 <tr>
                                     <td> {{$loop->iteration}} </td>
@@ -68,11 +49,6 @@
                                     </td>
                                     <td>
                                         <input type="checkbox" data-id="{{ $category->id }}" name="status" class="js-switch" {{ $category->status == 1 ? 'checked' : '' }}>
-                                        {{-- @if($category->status==1) 
-                                            Show 
-                                        @else 
-                                            Hide 
-                                        @endif --}}
                                     </td>
                                     <td>
                                         <input type="checkbox" data-id="{{ $category->id }}" name="featured" class="js-feature" {{ $category->featured == 1 ? 'checked' : '' }}>
@@ -82,11 +58,11 @@
                                         @csrf
                                         @method('delete')
                                         <td class="project-actions">
-                                            <a class="btn btn-primary btn-sm" href="#">
+                                            {{-- <a class="btn btn-primary btn-sm" href="#">
                                                 <i class="fas fa-folder">
                                                 </i>
                                                 View
-                                            </a>
+                                            </a> --}}
                                             @can('role-edit')
                                             <a class="btn btn-info btn-sm" href="{{route('categories.edit',$category->id)}}">
                                                 <i class="fas fa-pencil-alt">
@@ -95,7 +71,7 @@
                                             </a>
                                             @endcan
                                             @can('role-delete')
-                                            <button class="btn btn-danger btn-sm" type="submit">
+                                            <button class="btn btn-danger btn-sm show_confirm" type="submit" data-toggle="tooltip" title='Delete'>
                                                 <i class="fas fa-trash">
                                                 </i>
                                                 Delete
@@ -113,7 +89,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $categories->links() }}
+
             </div>
         </div>
         <script type="text/javascript">
@@ -133,62 +109,79 @@
 @endsection
 @section('scripts')
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 
-  <script>
+<script>
     $(document).ready(function(){
-      $('.js-switch').change(function () {
-          let status = $(this).prop('checked') === true ? 1 : 0;
-          // console.log(status);
-          let category_id = $(this).data('id');
-        //   console.log(category_id);
-  
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: '{{ route('category.update_status') }}',
-              data: {'status': status, 'cat_id': category_id},
-              success: function (data) {
-                toastr.options.closeButton = true;
-                toastr.options.closeMethod = 'fadeOut';
-                toastr.options.closeDuration = 20;
-                toastr.success(data.message);
-              }
-          });
-      });
-      $('.js-feature').change(function () {
-          let featured = $(this).prop('checked') === true ? 1 : 0;
-          // console.log(status);
-          let category_id = $(this).data('id');
-        //   console.log(category_id);
-  
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: '{{ route('category.update_feature') }}',
-              data: {'featured': featured, 'cat_id': category_id},
-              success: function (data) {
-                toastr.options.closeButton = true;
-                toastr.options.closeMethod = 'fadeOut';
-                toastr.options.closeDuration = 20;
-                toastr.success(data.message);
-              }
-          });
-      });
-  });
-
-    var path = "{{ route('categories.search') }}";
-    $('#search').typeahead({
-         minLength: 2,
-        source:  function (query, process) {
-        return $.get(path, { query: query }, function (data) {
-                return process(data);
+        //datatable
+        $('#myTable').DataTable();
+        //category status
+        $('.js-switch').change(function () {
+            let status = $(this).prop('checked') === true ? 1 : 0;
+            // console.log(status);
+            let category_id = $(this).data('id');
+            //   console.log(category_id);
+    
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: '{{ route('category.update_status') }}',
+                data: {'status': status, 'cat_id': category_id},
+                success: function (data) {
+                    toastr.options.closeButton = true;
+                    toastr.options.closeMethod = 'fadeOut';
+                    toastr.options.closeDuration = 20;
+                    toastr.success(data.message);
+                }
             });
-        }
+        });
+        //category feature
+        $('.js-feature').change(function () {
+            let featured = $(this).prop('checked') === true ? 1 : 0;
+            // console.log(status);
+            let category_id = $(this).data('id');
+            //   console.log(category_id);
+    
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: '{{ route('category.update_feature') }}',
+                data: {'featured': featured, 'cat_id': category_id},
+                success: function (data) {
+                    toastr.options.closeButton = true;
+                    toastr.options.closeMethod = 'fadeOut';
+                    toastr.options.closeDuration = 20;
+                    toastr.success(data.message);
+                }
+            });
+        });
     });
 
-  </script>
+    $('.show_confirm').click(function(event) {
+          var form =  $(this).closest("form");
+          {{-- console.log(form); --}}
+          var name = $(this).data("name");
+          {{-- console.log(name); --}}
+
+          event.preventDefault();
+          swal({
+              title: `Are you sure you want to delete this record?`,
+              text: "If you delete this, it will be gone forever.",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              form.submit();
+            }
+          });
+      });
+
+</script>
+
+
+
+
 @endsection
 
     

@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CkeditorController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialSettingsController;
 use App\Http\Controllers\SiteSettingsController;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -40,13 +44,25 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/roles', RoleController::class);
     Route::resource('/users', UserController::class);
     Route::resource('/permissions', PermissionController::class);
+    Route::resource('/products',ProductController::class);
+
+    Route::resource('/blogs',BlogController::class);
+
+    Route::post('ckeditor/upload', [CkeditorController::class,'upload'])->name('ckeditor.upload');
+
+
 
     Route::get('/categories/update-status',[CategoryController::class,'update_status'])->name('category.update_status');
     Route::get('/categories/update-feature',[CategoryController::class,'update_feature'])->name('category.update_feature');
-    Route::get('/categories/search',[CategoryController::class,'result'])->name('categories.search');
+
+    Route::get('/blogs/update-status',[BlogController::class,'update_status'])->name('blog.update_status');
+
 
 
     Route::resource('/categories', CategoryController::class);
+
+    Route::resource('/testimonials', TestimonialController::class);
+
 });
 
 

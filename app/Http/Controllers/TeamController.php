@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class TeamController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('admin.product.index');
+        //
     }
 
     /**
@@ -24,8 +23,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories=Category::where('status',1)->get();
-        return view('admin.product.create',compact('categories'));
+        //
     }
 
     /**

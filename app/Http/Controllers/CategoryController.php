@@ -13,9 +13,8 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        
-        $categories=Category::orderBy('updated_at','desc')->paginate(10);
+    {  
+        $categories=Category::orderBy('updated_at','desc')->get();
         return view('admin.category.index',compact('categories'));
     }
 
@@ -60,7 +59,8 @@ class CategoryController extends Controller
         }
         // dd($category);
         $category->save();
-        return redirect()->route('categories.index')->with('status','Category added successfully');
+
+        return redirect()->route('categories.index')->with(['message' => 'Category added successfully.']);
 
     }
 
@@ -177,12 +177,15 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category=Category::findOrFail($id);
+        $image_path = public_path('category/' . $category->image);    
+            if(file_exists($image_path)){
+                unlink($image_path);
+            }else{
+                
+            }
+        $category->delete();
+        return back()->with('status','Category deleted successfully');
     }
 
-    public function result(Request  $request)
-    {
-        $result=Category::where('name', 'LIKE', "%{$request->input('query')}%")->get();
-        return response()->json($result);
-    }
 }
