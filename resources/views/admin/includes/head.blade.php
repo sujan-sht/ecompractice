@@ -42,6 +42,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+ <script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
+
   
   <style>
     .cke_chrome {

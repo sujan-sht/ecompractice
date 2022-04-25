@@ -1,6 +1,6 @@
 @extends('admin.includes.main')
 
-@section('title')Add Blog -  {{ config('app.name', 'Laravel') }} @endsection
+@section('title')Add Banner -  {{ config('app.name', 'Laravel') }} @endsection
 @section('content')
 
     <section class="content">
@@ -9,36 +9,28 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Add Blog</h3>
-                            <a href="{{route('blogs.index')}}" class="btn btn-success btn-sm float-right">View Blogs</a>
+                            <h3 class="card-title">Add Banner</h3>
+                            <a href="{{route('banners.index')}}" class="btn btn-success btn-sm float-right">View Banner</a>
                         </div>
                         <div class="col-md-12 p-0">
                             @include('admin.includes.message')
                         </div>
                         <div class="card-body">
-                            <form action="{{route('blogs.store')}}" method="post" enctype="multipart/form-data">
+                            <form action="{{route('banners.store')}}" method="post" enctype="multipart/form-data">
                                 @csrf
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="name">Title</label> <span class="text-danger"> * </span>
-                                            <input type="text" class="form-control" name="title" value="{{old('title')}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="slug">Slug</label><span class="text-danger"> * </span>
-                                            <input type="text" class="form-control" name="slug" value="{{old('slug')}}">
-                                        </div>
-                                    </div>
-                                </div> 
-
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="name">Description</label>
-                                            <textarea name="description" class="form-control">{{old('description')}}</textarea>
+                                            <label for="name">URL</label>
+                                            <input type="text" class="form-control" name="url" value="{{old('url')}}">
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Status</label><br>
+                                        <input type="radio" name="status" value="1" @if(old('status') == '1') checked @endif> Show
+                                        <input type="radio" name="status" value="0" @if(old('status') == '0') checked @endif> Hide
                                     </div>
                                 </div>
                                 <div class="row">
@@ -52,11 +44,6 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <img id="preview-image-before-upload"  style="max-height:150px;">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Status</label> <span class="text-danger"> * </span>
-                                        <input type="radio" name="status" value="1" @if(old('status') == '1') checked @endif> Show
-                                        <input type="radio" name="status" value="0" @if(old('status') == '0') checked @endif> Hide
                                     </div>
                                 </div> 
                                 <button type="submit" class="btn btn-success btn-sm float-right">Save</button> 

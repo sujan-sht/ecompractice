@@ -1,5 +1,5 @@
 @extends('admin.includes.main')
-@section('title')Teams -  {{ config('app.name', 'Laravel') }} @endsection
+@section('title')Programs -  {{ config('app.name', 'Laravel') }} @endsection
 @section('content')
 
     <section class="content">
@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     @can('role-create')
-                        <a href="{{route('teams.create')}}" class="btn btn-success btn-sm float-right">Add Team Member</a>
+                        <a href="{{route('programs.create')}}" class="btn btn-success btn-sm float-right">Add Program</a>
                     @endcan
                 </div>
                 <div class="card-body p-0">
@@ -16,28 +16,30 @@
                             <tr>
                                 <th> # </th>
                                 <th>Image</th>
-                                <th> Name </th>
-                                <th>Designation</th>
-                                <th>Contact</th>
+                                <th> Title </th>
+                                <th>Date</th>
+                                <th>Location</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(count($teams)>0)
-                                @foreach ($teams as $team)
+                            @if(count($programs)>0)
+                                @foreach ($programs as $program)
                                 <tr>
                                     <td> {{$loop->iteration}} </td>
                                     <td>
-                                        @if(empty($team->image)) 
+                                        @if(empty($program->image)) 
                                             <img src="{{asset('category/no-image.png')}}" alt="no-image" width="80px" height="80px" class="img-fluid"> 
                                         @else
-                                            <img src="{{asset('uploads/teams/'.$team->image)}}" alt="{{$team->name}}" width="80px" height="80px" class="img-fluid">
+                                            <img src="{{asset('uploads/programs/'.$program->image)}}" alt="{{$program->title}}" width="80px" height="80px" class="img-fluid">
                                         @endif
                                     </td>
-                                    <td> {{$team->name}} </td>
-                                    <td> {{$team->designation}} </td>
-                                    <td> {{$team->contact}} </td>
-                                    <form action="{{route('teams.destroy',$team->id)}}" method="post">
+                                    <td> {{$program->title}} </td>
+                                    {{-- <td>{!! Str::limit($program->description, 200, $end='.......') !!}</td> --}}
+                                    <td>{{$program->date}}</td>
+                                    <td>{{$program->location}}</td>
+
+                                    <form action="{{route('programs.destroy',$program->id)}}" method="post">
                                         @csrf
                                         @method('delete')
                                         <td class="project-actions">
@@ -47,7 +49,7 @@
                                                 View
                                             </a> --}}
                                             @can('role-edit')
-                                            <a class="btn btn-info btn-sm" href="{{route('teams.edit',$team->id)}}">
+                                            <a class="btn btn-info btn-sm" href="{{route('programs.edit',$program->id)}}">
                                                 <i class="fas fa-pencil-alt">
                                                 </i>
                                                 Edit
@@ -79,4 +81,18 @@
 </div>
 @endsection
 
-    
+@section('scripts')
+
+
+<script>
+    $(document).ready(function(){
+        //datatable
+        $('#myTable').DataTable();
+    });
+
+</script>
+
+
+
+
+@endsection

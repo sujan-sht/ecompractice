@@ -117,7 +117,7 @@ class TestimonialController extends Controller
     public function destroy($id)
     {
         $testimonial=Testimonial::findOrFail($id);
-        $image_path = public_path('uploads/test$testimonial/' . $testimonial->image);    
+        $image_path = public_path('uploads/testimonials/' . $testimonial->image);    
             if(file_exists($image_path)){
                 unlink($image_path);
             }else{

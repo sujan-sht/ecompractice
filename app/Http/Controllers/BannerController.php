@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 
-class BlogController extends Controller
+class BannerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::all();
-        return view('admin.blog.index',compact('blogs'));
+        $banners = Banner::all();
+        return view('admin.banner.index',compact('banners'));
     }
 
     /**
@@ -25,7 +25,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view('admin.blog.create');
+        return view('admin.banner.create');
     }
 
     /**
@@ -36,31 +36,18 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'slug'=>'required|unique:blogs,slug,',
-        ]);
-
-        $blog=new Blog();
-        $blog->title=$request->title;
-        $blog->slug=$request->slug;
-        $blog->description=$request->description;
-        $blog->status=$request->status;
-        
-
+        $banner = new Banner();
+        $banner->url=$request->url;
+        $banner->status=$request->status;
         if ($request->hasFile('image')) {
             $imageName = time().'.'.$request->image->extension();  
      
-            $request->image->move(public_path('uploads/blogs/'), $imageName);
-            $blog->image= $imageName;
-            // $blog->image = $request->image->store('uploads/blogs');
+            $request->image->move(public_path('uploads/banners/'), $imageName);
+            $banner->image= $imageName;
         }
 
-        if($blog->save()){
-            return redirect()->route('blogs.index')->with('message','Blog added successfully');
-        }
-        
-
+        $banner->save();
+        return redirect()->route('banners.index')->with('message','Banner added successfully');
     }
 
     /**
@@ -82,9 +69,8 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-
-        $blog=Blog::findOrFail($id);
-        return view('admin.blog.edit',compact('blog'));
+        $banner = Banner::findOrFail($id);
+        return view('admin.banner.edit',compact('banner'));
     }
 
     /**
@@ -96,35 +82,26 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'title' => 'required',
-            'slug'=>'required|unique:blogs,slug,'.$id,
-        ]);
-
-        $blog = Blog::findOrFail($id);
-        $blog->title=$request->title;
-        $blog->slug=$request->slug;
-        $blog->description=$request->description;
-        $blog->status=$request->status;
+        $banner = Banner::findOrFail($id);
+        $banner->url=$request->url;
+        $banner->status=$request->status;
 
         if ($image = $request->file('image')) {
-            $image_path = public_path('uploads/blogs/' . $blog->image);
+            $image_path = public_path('uploads/banners/' . $banner->image);
             
             if(file_exists($image_path)){
                 unlink($image_path);
             }
-                $destinationPath = 'uploads/blogs/';
+                $destinationPath = 'uploads/banners/';
                 $profileImage = date('YmdHis') . "." .$image->getClientOriginalName();
                 $image->move($destinationPath, $profileImage);
-                $blog->image = "$profileImage";
+                $banner->image = "$profileImage";
             
         }else{
-            unset($blog->image);
+            unset($banner->image);
         }
-        $blog->save();
-        return redirect()->route('blogs.index')->with('message','Blog updated successfully');
-        
-        
+        $banner->save();
+        return redirect()->route('banners.index')->with('message','Banner updated successfully');
     }
 
     /**
@@ -135,24 +112,25 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-        $blog=Blog::findOrFail($id);
-        $image_path = public_path('uploads/blogs/' . $blog->image);    
+        $banner=Banner::findOrFail($id);
+        $image_path = public_path('uploads/banners/' . $banner->image);    
             if(file_exists($image_path)){
                 unlink($image_path);
             }else{
                 
             }
-        $blog->delete();
-        return back()->with('message','Blog deleted successfully');
+        $banner->delete();
+        return back()->with('message','Banner deleted successfully');
     }
 
     public function update_status(Request $request)
     {
-        $blog = Blog::findOrFail($request->id);
+        dd('hi');
+        $banner = Banner::findOrFail($request->id);
         
-        $blog->status = $request->status;
+        $banner->status = $request->status;
         
-        $blog->save();
+        $banner->save();
     
         return response()->json(['message' => 'Status updated successfully.']);
     }
